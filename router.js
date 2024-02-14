@@ -25,8 +25,16 @@ const scene = new Scene('valentinki',
   	},
   	async (ctx) => {
 
-		const username = ctx.message.text.match(/(?:vk\.com\/(?:id)?|@)([a-zA-Z0-9_.]+)/)[1];
+		let username;
 
+		try{
+			username = ctx.message.text.match(/(?:vk\.com\/(?:id)?|@)([a-zA-Z0-9_.]+)/)[1];
+		}
+		catch(err){
+			ctx.scene.step = 1;
+			ctx.reply('Произошла ошибка. Проверьте ссылку и попробуйте ещё раз');
+			return
+		}
 		const users = await bot.execute("users.get", {user_ids:username})
 		if (!users.length){
 			ctx.scene.step = 1;
